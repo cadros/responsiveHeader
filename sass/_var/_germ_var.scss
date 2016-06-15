@@ -1,0 +1,38 @@
+// ========== Vars & Functions ==================== //
+$fonts : (4 3 2.6 2.4 2 1.8)!default;
+$font :  "Helvetica Neue", Helvetica, Arial, sans-serif!default;
+
+// ~~~~~~~~~~~ Media Queries
+$i  :"only screen and (min-width: 630px) and (min-device-width: 640px )";
+$pad: "only screen and (min-width: 760px) and (min-device-width: 768px )";
+$mid: "only screen and (min-width: 1024px)";
+$big: "only screen and (min-width: 1280px)";
+
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Dimensions 
+// base line-height 18 (0.937em) = 1.8 with html font-size set to 62.5% 
+
+$baseLH: 2.4; 
+
+@function b_height($times:1) {
+	$base_h :  $baseLH *10px * $times;
+	@return $base_h; 
+}
+
+// grid basic
+$maxW : 936px; // site content no padd (excluding full width els)
+$sidebar: 312px; // no padd
+$padW : 600px; // no padding
+$halfW : 456px;
+$widget:264px;
+// theme specific
+$mainbar : $sidebar * 2; // 624px padding included
+$outNav : b_height(3); // side nav bar fixed, goes outside site max width
+
+$half :round(b_height(.5));
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Floats, positions
+
+$a: absolute;
+$r: relative;
+$f: fixed;

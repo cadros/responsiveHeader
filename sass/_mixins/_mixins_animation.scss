@@ -1,0 +1,72 @@
+// Anumation Mixins ========
+
+$rules: ( -webkit-transition -moz-transition -o-transition -ms-transition transition );
+@mixin transitions( $props:all, $dur:1 ) {
+@if $props != all {
+$prope:();
+@each $prop in $props { 
+		$prope: join($prope, $prop, comma );
+		}
+		transition-property: $prope;
+		transition-duration:#{$dur}s;
+		-webkit-transition-property:$prope;
+		-o-transition-property:$prope;
+		-moz-transition-property:$prope;
+		-webkit-transition-duration:#{$dur}s;
+		-ms-transition:all #{$dur}s ease;
+	} @else {
+		@each $rule in $rules {
+			#{$rule}: #{$dur}s;
+		}
+	}
+}
+
+@mixin transition( $props:all, $dur:1 ) {
+@if $props != all {
+$prope:();
+@each $prop in $props { 
+		$prope: join($prope, $prop, comma );
+		}
+		transition-property: $prope;
+		transition-duration:#{$dur}s;
+		-webkit-transition-property:$prope;
+		-o-transition-property:$prope;
+		-moz-transition-property:$prope;
+		-webkit-transition-duration:#{$dur}s;
+		-ms-transition: all #{$dur}s ease;
+	} @else {
+		$rules: (transition -webkit-transition -o-transition -moz-transition -ms-transition);
+		@each $rule in $rules {
+			#{$rule}: #{$props} #{$dur}s ease;
+		}
+	}
+}
+
+@mixin transition-none( ) {
+	@each $rule in $rules {
+		#{$rule}: none;
+	}
+}
+
+// no support for lth ie9
+@mixin transform($how:rotateY, $much:"(180deg)", $origin:0 0 ) {
+	transform:#{$how}#{$much};
+	-ms-transform:#{$how}#{$much}; /* IE 9 */
+	-webkit-transform:#{$how}#{$much}; /* Safari and Chrome */
+	transform-origin:$origin;
+	-ms-transform-origin:$origin; /* IE 9 */
+	-webkit-transform-origin:$origin; /* Safari and Chrome */
+}
+
+@mixin transform-none() {
+	-ms-transform: none;
+   	-webkit-transform:none;
+    transform: none;
+}
+
+@mixin backface() {
+	backface-visibility:hidden;
+	-webkit-backface-visibility:hidden; /* Chrome and Safari */
+	-moz-backface-visibility:hidden; /* Firefox */
+	-ms-backface-visibility:hidden; /* Internet Explorer */
+}

@@ -1,0 +1,7 @@
+@import "germ_placeholders"; // comment to stop using default color variables
+%hover_caption {
+	position:$a;
+	padding: b_height(.5);
+	background: palete($w, 5, .7);
+	z-index:1
+}

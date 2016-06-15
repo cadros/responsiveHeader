@@ -1,0 +1,59 @@
+// Color Mixins =============
+
+@function palete($color:$main, $change:1, $alpha:1 ) {
+	$do :  darken($color, 20%), // 1
+		   darken($color, 10%), // 2
+		   lighten($color, 10%), // 3
+		   lighten($color, 20%), // 4
+		   hsla(hue($color), saturation($color), lightness($color), $alpha);  // 5
+	@return nth( $do, $change );
+}
+@function ie_palete( $color:palete($color:$main, $change:5, $alpha:0.5)) {
+	@return ie-hex-str($color);
+}
+
+@mixin palete($color: $main, $change:1, $alpha:1, $prop:background ) {
+	@each $pr in $prop {
+	$palet : (  $color, // 1
+				darken($color, 20%), // 2
+				darken($color, 10%), // 3
+				 
+				lighten($color, 10%), // 4
+				lighten($color, 20%), // 5
+				hsla(hue($color), saturation($color), lightness($color), $alpha) // 6
+				);
+	#{$prop}: nth( $palet, $change); 
+	//@include ie_rgba($color );
+	}  
+}
+@mixin ie_rgba( $rgb : palete($color:$main, $change:5, $alpha:0.9) ) {
+	filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#{ie-hex-str($rgb)}, endColorstr=#{ie-hex-str($rgb)}";
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#{ie-hex-str($rgb)}, endColorstr=#{ie-hex-str($rgb)}";
+	zoom: 1
+}
+
+
+// GRADIENTS. default is horizontal, main color bottom. 
+// for vertical: $moz:right, $webkit: $moz top + ', ' + left top
+
+@mixin gradient($background:$main, $first_point:$background, $secont_point:$white, $moz:bottom, $webkit: right $moz + ', ' + right top, $ietype:1) {
+    background-color: $background;
+	 /* fallback (Opera) */
+	background-image: -o-linear-gradient($moz, $first_point, $secont_point); 
+    /* Mozilla: */
+    background-image: -moz-linear-gradient($moz, $first_point, $secont_point);
+    /* Chrome, Safari:*/
+    background-image: -webkit-gradient(linear, $webkit, from($first_point), to($secont_point));
+	// FF 3.6+
+	background-image  : -ms-linear-gradient($moz, $first_point, $secont_point);
+	// IE10
+	background-image: -o-linear-gradient($moz, $first_point, $secont_point);
+	background-repeat: repeat-x;
+	//@include ie_gradient($first_point, $secont_point, $type: $ietype );
+}
+
+@mixin ie_gradient ( $first_point:$main, $secont_point:$next_main, $type:1) {
+    /* MSIE */
+    filter: progid:DXImageTransform.Microsoft.Gradient(
+                StartColorStr=#{$secont_point}, EndColorStr=#{$first_point}, GradientType=#{$type});
+}

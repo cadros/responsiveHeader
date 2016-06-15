@@ -1,0 +1,71 @@
+#responsive_header {
+    margin-bottom:12px;
+    p {
+        margin-top:0
+    } 
+    .srcset_button {
+        cursor:pointer
+    }
+    .holder {
+        display:inline-block
+    }
+    .src {
+        width:40px
+    }
+    .src_size {
+        @include scaleit(1.1, font-size ) 
+    }
+    .close {
+        font-size:inherit;
+        text-align:left
+    }
+    .sandwich {
+        position:$r;
+        margin-bottom:24px;
+        button {
+            padding:0
+        }
+        
+        input {
+            opacity: 0;
+            position: relative;
+            width: 30px;
+            margin-left: -30px;
+            z-index:2;
+        }
+        
+        .expand {
+            position:$a;
+            background:$w;
+            width:100%;
+            padding:10px;
+            display: block;
+            text-align:left;
+            @include box-sizing;
+            @include transform('translate', "(-100%, 0)" );
+            @include transform('scale', "(0, 0)" );
+        }
+
+        input:checked {
+            ~ .expand {
+                @include transform('scale', "(1,1)" );
+            }
+             ~ .fa {
+               @include transform('rotate', "(45deg)", 50% 50%)
+            }
+        }
+    }
+}///resp header
+
+.respHeaderNote {
+    &.screened {
+        display:none
+    }
+}
+
+.wp-core-ui .button.hardsell {
+        border-color: red
+    }
+.wp-full-overlay.expanded {
+    // display:none
+}

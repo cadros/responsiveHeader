@@ -1,0 +1,206 @@
+// ======== Dimentions Mixins
+
+@mixin scaleit($font_size, $props, $elements: "&", $base_line_h: $baseLH ) {	
+// e.g. h2 { @include scaleit(1.4, padding line-height);
+// e.g @include scaleit($fonts, line-height padding-top, h "." + left_title);
+    $values: ();
+    $times : false;
+    @each $s in $font_size {
+
+       // fix font-size bigger then base line
+    	@if $s > $base_line_h {
+	    	$times : $s / $base_line_h;
+	       @if( 2 > $times ) {
+	       	$times : ceil($times); // round up
+	       } @else {
+	       	$times : floor($times); // round down
+	       }
+    		$base_line_h :  $base_line_h * $times;
+		}
+
+        $values: append($values, #{$base_line_h / $s }  );
+    }
+    $value: join((), $values,  space );
+		
+	@if $elements != "&" { // self
+	@each $e in $elements {
+	@for $x from 1 through 6 { // 6 for number of h-s 
+	#{$e}#{$x} {
+    @each $prop in $props { 
+		@if $prop != line-height { 
+		#{$prop}: #{nth( $value, $x)}em } 
+		@else { #{$prop}: #{nth( $value, $x)} }
+		}
+	$px : nth( $font_size, $x) * 10;
+	font-size: #{$px}px;
+	//font-size: #{nth( $font_size, $x)}rem;
+	  }  }  }  }
+	@else { // element isnt self
+	@each $prop in $props { 
+	@if $prop == font-size {
+	$px : $font-size * 10;
+	//font-size : #{$font_size}rem;
+	font-size : #{$px}px;
+	}
+	@else { // prop isnt font-size 
+	@if $prop == line-height { #{$prop}: $value }
+	@if $prop != line-height { #{$prop}: #{$value}em }
+	 } }
+	}	
+}
+
+@mixin columns( $cols:2, $element: null, $width: null, $gap: null, $rule:null ) {
+	-webkit-column-count: $cols; // Chrome, Safari, Opera
+    -moz-column-count: $cols; // Firefox
+    column-count: $cols;
+
+    @if( $width ) {
+    	-webkit-column-width: $width;
+	    -moz-column-width: $width;
+	    column-width: $width;
+    }
+    @if($gap) {
+    	-webkit-column-gap: $gap;
+	    -moz-column-gap: $gap;
+	    column-gap: $gap;
+    }
+    @if($rule) {
+	    -webkit-column-rule: $rule;
+	    -moz-column-rule: $rule;
+	    column-rule: $rule;
+	}
+	@if($element) {
+		#{$element} {
+			-webkit-column-break-inside: avoid;
+		    page-break-inside: avoid;
+		    break-inside: avoid;
+		    display:inline-block;
+			vertical-align:top;
+			@if( $width == null ) {
+				width:100%;
+			}
+		}
+	}
+}
+
+
+
+@mixin gridLeft($cols:null, $element: null, $gap:null, $display:null, $start: null, $ad_col:null, $clear:null, $margin:null, $float:left) {
+	@include grid($cols:$cols, $gap:$gap, $float: $float) 
+}
+
+
+// grids .cell els of a parent. use aside for ad column
+
+@mixin grid($cols:4, $element: null, $gap:b_height(), $display:null, $start: null, $ad_col:null, $clear:null, $margin:null, $padding:null, $float: null, $centering:null ) {
+    
+    @if $clear !=null { 
+	    @include clearfix;
+	}
+
+    > li, > figure, > .cell, #{$element}   {
+    	@if $padding !=no { 
+		    padding-bottom: $gap;
+		}
+	}
+
+// use inside queries. change number of cols for needed
+	@if $display != null { display:$display }
+	@if $margin != null {
+	    margin-left: -($gap/2);
+	    margin-right: -($gap/2);
+		}
+	@if $float != null { 
+		$display: inline;
+	} @else {
+		$display: inline-block;
+	}
+	
+	> li, > figure, > .cell, #{$element}  {
+    	@if $float != null {
+	    	display: $display;
+	    	float: $float;
+	    } @else { 
+	    	display: $display;
+	    	vertical-align:top;
+	    	float: left;
+	    }
+    	&:nth-child(n) { 
+    		clear: none;
+    		@if $centering != no { 
+				&:last-child { // prevent centering set by last child
+					display:$display;
+					float: $float;
+				}
+			}
+    	}
+    }
+
+    > li, > figure, > .cell, > aside, #{$element}    {
+    	@if $padding !=no { 
+		    padding-left:($gap/2);
+		    padding-right:($gap/2);
+		}
+	    width: 100%/$cols;
+    }
+
+	    // reduce cols for ad_col
+	@if $ad_col != null {
+      	$cols: $cols - 1;
+	}
+
+	> li, > figure, > .cell, #{$element}  {
+	    &:nth-child(#{$cols}n+1) { 
+	    	clear: both;
+            // no left padding for the 1st item in a row
+            padding-left:0 
+	    }
+        // no right padding for the last item in a row
+        &:nth-child(#{$cols}n+0) { 
+            padding-right:0
+        }
+
+	    // center last child
+	    @if $centering != no { 
+		    &:nth-of-type(#{$cols}n+1) { 
+		    	&:last-child {
+		    		margin: 0 auto;
+					float: none;
+					display: block;
+				}
+		    }
+		}
+    }
+}
+
+
+@mixin one_nth( $full:3, $position:2, $gap:b_height(), $start: $i ) {
+	$col : percentage( ( 100/$full ) /100 );
+	@media #{$start} {
+		position: relative;
+		width: $col;
+		margin-left:  $col * $position - $col;
+
+		@if $gap == null {
+		padding-left: round( $gap / 2 );
+		padding-right: round( $gap / 2 );
+		}
+	}
+}
+
+@mixin inline_one_nth( $full:3, $nth:1, $float:left ) {
+	$width : percentage( ( 100/$full ) /100 ) * $nth;
+		width: $width;
+		float: $float;
+}
+
+@mixin null($props : null) {
+	@if( null != $props ) {
+		@each $prop in $props {
+			$prop :0
+		}
+	} @else {
+		margin:0;
+		padding:0;	
+	}
+}

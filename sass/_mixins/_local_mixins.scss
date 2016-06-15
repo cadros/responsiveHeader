@@ -1,0 +1,98 @@
+// ==================== LOCALMIXINS ==================== 
+@mixin fixed_stuck($elements) {
+	$x:0;
+	@each $el in $elements {
+		$x:$x +1;
+		#{$el} {
+			@media #{$pad} {
+				position:fixed;
+				z-index:20 + $x;
+				top:0;
+			}
+		}
+	}
+	&.admin-bar {
+		@each $el in $elements {
+			#{$el} {
+				@media #{$pad} {
+					top:46px;
+				}
+				@media #{$mid} {
+					top:32px;
+				}
+			}
+		}
+	}
+}
+
+@mixin a_color_hover($color:$a_color, $hover:$a_hover) {
+	color:$color;
+	&:hover {
+		color:$hover
+	}
+}
+
+
+@mixin caption_look ($back:$b, $outline: $color, $frame:1px solid) {
+	background: $back;
+	outline:$frame $outline;
+}
+
+@mixin sub_butt() {
+	@include gradient($first_point:$main, $secont_point:$white);
+	width: auto;
+	border: 1px solid $main;
+	&:hover {
+		@include gradient($first_point:$main, $secont_point:$white);
+	}
+}
+
+@mixin round_butt( $size:50px ) {
+	width: $size;
+	height: $size;
+	@include radius(50%)
+}
+
+@mixin mobile_menu_butt($color: $main) {
+	@include radius(50%);
+	box-shadow:0 2px 4px $pale;
+	border-bottom:1px dotted $color;
+}
+
+@mixin alert_look($type:message) {
+	@if $type == message {
+	@include caption_look($outline: $main, $frame:1px dotted);
+	} @else {
+	@include caption_look($outline: $main, $frame:1px dotted);
+	color:red;
+	}
+
+}
+
+@mixin pseudo_height($background: $main, $height:100%, $width:100%, $top:100%, $left:0 ) {
+	position: $r;
+	
+	@include pseudo( $type: after, $background: $background, $height: $height, $width:$width, $left: $left, $top: $top, $content:'' );
+}
+
+@mixin pseudo_height_look($background: $white, $border: 1px, $b_style: dotted $decor, $height:550%, $top:100%, $left:- $border ) {
+	position: $r;
+	background: $background;
+	border: {
+		top : $border $b_style;
+		left: $border $b_style;
+		right: $border $b_style; }
+	@include pseudo( $type: after, $background: $background, $height: $height, $left: $left, $top: $top );
+	&:after {
+		border: {
+			left: $border $b_style;
+			right: $border $b_style; }
+	}
+	@include pseudo( $type: before, $background: $background, $height: $border, $left: $left, $top: $border );
+	&:before {
+		border: {
+			top: $border $b_style;
+			 }
+	}
+}
+

@@ -1,0 +1,145 @@
+// ======= Box layout, positioning, alignment Mixins ======
+
+
+@mixin vertical_center_old($el, $text:null, $middle:null ) {
+	display:table;
+	@each $e in $el {
+	& #{$e} {
+		display:table-cell;
+			  @if $middle == null { vertical-align: middle; }
+			  padding:0;
+			  @if $text == null { text-align: center }	}		 	
+	}
+}
+
+@mixin vertical_center($animate:null) {
+        position:$a;
+        top: 50%;
+        @include transform(translateY, "(-50%)");
+        @if $animate {
+			@include transition()
+		}
+}
+
+@mixin horizontal_center($width:b_height(2) ) {
+	left:50%;
+	margin-left:- $width / 2
+}
+
+@mixin flex-box ($kid, $align: null ) {
+	
+	// new
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: -moz-flexbox;
+	display: flex;
+	@if $align != null {
+		@if $align == start {
+			$align : start;
+		}
+		@if $align == end {
+			$align : end;
+		}
+		-webkit-align-items: flex-#{$align};
+		-ms-flex-align: flex-#{$align};
+		align-items: flex-#{$align};
+		-webkit-flex-flow: row wrap;
+		justify-content:flex-#{$align};
+	}
+	// old webkit
+	display:-webkit-box;
+	-webkit-box-orient:horizontal;
+	@if $align != null {
+		-webkit-box-pack:$align;
+		-webkit-box-align:center;
+	}
+	// kids
+		#{$kid} {
+			-webkit-box-flex:1;
+			-webkit-flex: auto;
+			-ms-flex: auto;
+			-moz-flex: auto;
+			flex: auto;
+		}
+}
+
+
+@mixin box-sizing( $sizing:null ) {
+	$model:border-box;
+	@if $sizing != null { $model: $sizing }
+	box-sizing:$model;
+	-moz-box-sizing:$model; /* Firefox */
+	-webkit-box-sizing:$model; /* Safari */
+}
+
+@mixin radius($much:10px) {
+	-webkit-border-radius : $much;
+	-moz-border-radius : $much;
+	border-radius : $much; 
+}
+@mixin no-radius() {
+	-webkit-border-radius : 0;
+	-moz-border-radius :0;
+	border-radius : 0;
+}
+
+@mixin box-shadow($shadow:0 0 2px, $color:$main, $set:null) {
+	-webkit-box-shadow:$shadow $color $set;
+	-moz-box-shadow:$shadow $color $set;
+	box-shadow:$shadow $color $set;
+}
+
+@mixin box_null() {
+	border:none;
+	box-shadow:none
+}
+
+@mixin title_null() {
+	text-shadow:none
+}
+
+@mixin button_null() {
+	padding:0;
+	color:inherit;
+	background:inherit;
+	text-transform:inherit;
+	line-height:inherit;
+	@include box_null;
+	@include no-radius;
+}
+
+@mixin contain_text() {
+	-webkit-hyphens: auto;
+	-moz-hyphens: auto;
+	-ms-hyphens: auto;
+	hyphens: auto;
+	word-wrap: break-word;
+}
+
+@mixin clearfix {
+	&:before,
+	&:after {
+    content: "";
+    display: table;
+} 
+	&:after {
+    clear: both;
+}
+	& {
+    zoom: 1; /* For IE 6/7 (trigger hasLayout) */
+}
+}
+
+@mixin clearafter {
+	//&:before,
+	&:after {
+    content: "";
+    display: block;
+} 
+	&:after {
+    clear: both;
+}
+	& {
+    zoom: 1; /* For IE 6/7 (trigger hasLayout) */
+}
+}

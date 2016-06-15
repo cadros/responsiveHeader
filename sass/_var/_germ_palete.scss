@@ -1,0 +1,22 @@
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Base Colors
+$b 	 : rgb(0,0,0); // black
+$w 	 : rgb(255,255,255); // white
+$t   :rgba(0,0,0,0); // transparent
+$s   : rgb(192, 192, 192); // silver
+$red : rgb(255,0,0);
+
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Germ Palete
+// main
+$main  : $w!default;
+$alt   : $red!default;
+$color : $b!default;
+
+// links
+$a_color   : $s!default;
+$a_visited : $s!default;
+$a_hover   : $alt!default;
+
+// ui
+$butt  : $alt!default;
+$error : $red!default;

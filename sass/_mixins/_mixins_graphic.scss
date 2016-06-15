@@ -1,0 +1,167 @@
+// ~~~~~~~~~~~~~~~~~ CSS Drawing & Graphic Mixins
+
+@mixin icon($icon) {
+	@extend .icon-#{$icon}!optional;
+	@extend [class^="icon-"]!optional
+}
+
+@mixin square($size : b_height()) {
+	height: $size;
+	width:$size;
+}
+
+
+@mixin colored-disc-list( $color: $main ) {
+	list-style-image: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(50%,$color), color-stop(80%, $t)); /* Chrome,Safari4+ */
+	list-style-image:-webkit-radial-gradient(center, ellipse cover, $color 50%, $t 80% );/* Chrome10+,Safari5.1+ */
+	list-style-image:-o-radial-gradient(center, ellipse cover, $color 50%, $t 80% ); /* Opera 12+ */
+	list-style-image: -ms-radial-gradient(center, ellipse cover, $color 50%, $t 80% ); /* IE10+ */
+	list-style-image: radial-gradient(ellipse at center, $color 50%, $t 80% ); /* W3C */
+}
+
+
+@mixin pseudo-content( $height:null, $position : absolute, $content:null, $display:null) {
+$dis:block;
+@if $display != null { $dis:$display }
+@if $content != null { 
+	content:$content }
+@if $position != '' {
+	position: $position;
+}
+@if $display != '' {	
+	display:$dis;
+	}
+@if $height != null { 
+	height:$height; 
+	}
+}
+
+@mixin pseudo( $type:before, $background:null, $width:null, $height:null, $top:0, $left:0, $right:null, $z:0, $position : absolute, $content:null, $display:null) {
+	&:#{$type} {
+		@include pseudo-content( $height, $position, $content, $display );
+		@if $width != null { 
+			width: $width;
+		}
+			z-index: $z;
+		@if $background != null { 
+			background:$background;
+		}
+		@if $position != static {
+			top: $top;
+			@if $right != null { 
+				right: $right;
+			}
+			left: $left;	
+		}
+	}
+}
+
+
+@mixin parent($color: $main, $side:bottom, $offset:null, $width:b_height(), $p:$r) {
+$off :null;
+@if $offset != null {
+	$off : $offset;
+} @else {
+	$off : - ($width * 2);
+}
+position:$p;
+	&:after {
+	@include pseudo-content($content:'') ;
+		border-width: $width;
+		width: 0;
+		border-style: solid;		
+	@if $side == bottom {
+		border-color: $color transparent transparent transparent;		
+		#{$side}:$off;
+		top:auto;
+		left:50%;
+		margin-left:- ($width); }
+	@if $side == top {
+		border-color: transparent transparent $color transparent;		
+		top: $off;
+		left:50%;
+		margin-left:- ($width);
+		}
+	@if $side == left {
+		border-color: transparent $color transparent transparent;
+		top: 50%;
+		margin-top:- ($width);
+		right: 100%;
+		}
+	@if $side == right {
+		border-color: transparent transparent transparent $color;
+		top: 50%;
+		margin-top:- ($width);
+		left: 100%;
+		}
+	}
+}
+
+// draws a ribbon ending
+@mixin ribbon($color: $main, $side:bottom, $top:-30px, $width:b_height(), $p:$r) {
+position:$p; 
+	&:after {
+	@include pseudo-content($content:'') ;
+		border-width: $width;
+		width: 0;
+		border-style: solid;		
+	@if $side == bottom {
+		border-color: transparent $color transparent $color transparent;		
+		bottom: $top;
+		top:auto;
+		left:50%;
+		margin-left:- ($width); }
+	@if $side == top {
+		border-color: transparent $color transparent $color;		
+		top: - ($width * 2);
+		left:50%;
+		margin-left:- ($width);
+		}
+	@if $side == left {
+		border-color: $color transparent $color transparent;
+		top: 50%;
+		margin-top:- ($width);
+		left:- ($width);
+		z-index:-1;
+		}
+	@if $side == right {
+		border-color: $color transparent $color $color;
+		top: 50%;
+		margin-top:- ($width);
+		left: 100%;
+		}
+	}
+}
+
+@mixin ie_shadow($color:$main, $dir:45) {
+	filter: progid:DXImageTransform.Microsoft.Shadow(color= #{$color},direction= #{$dir});
+}
+
+@mixin text-shadow($thick: '1px 1px 0', $color:$main) {
+	$shad: ();
+	@each $time in $thick { 
+		$shad : append( $shad, #{$time} $color, space );
+	}
+	$shadow: join((), $shad,  comma );
+	text-shadow: $shadow 
+}
+
+@mixin text_outline($color:$main, $stroke:1px, $fallback: true ) {
+	@if $fallback {
+		color: $fallback;
+	}
+	-webkit-font-smoothing: antialiased;
+//	-webkit-text-stroke-color: $color;
+//	-webkit-text-stroke-width: 1px;
+	@include text-shadow( 
+		$thick:( 
+			(- $stroke (- $stroke) 0), 
+			( $stroke (- $stroke) 0), 
+			(- $stroke $stroke 0), 
+			( $stroke $stroke 0)//,
+			//( 0 0 0)
+			),
+		$color:$color
+		);
+}
+// _:-moz-tree-row(hover), .selector {}

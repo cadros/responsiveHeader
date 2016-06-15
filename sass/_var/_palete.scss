@@ -1,0 +1,21 @@
+@import "germ_palete"; // comment to stop using default color variables
+
+
+// Theme colors
+
+$gw    : rgb(248, 248, 255); // ghostwhite
+$dblue : rgb(5,14,56);
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Theme Palete
+// If you keep using the germ color vars declared at germ_palete.scss, just copy the var you need and assing it anew here to override the default
+
+// main
+
+
+// links
+$a_color   : $dblue;
+$a_visited : $dblue;
+$a_hover   : lighten($dblue, 20%);
+
+// ui
+$butt  : $dblue;
