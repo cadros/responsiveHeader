@@ -1,4 +1,5 @@
 # RESPONSIVE CUSTOM HEADER
+## up to WP 4.5.3
 ***
 A set of custom functions making WordPress custom header image responsive. Handy when you develop a portfolio WP theme, or just need a better visual-per-device control.
 
